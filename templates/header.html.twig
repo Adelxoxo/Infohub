@@ -1,0 +1,33 @@
+<!-- templates/header.html.twig -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adel</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Our users</h1>
+
+    {% if user_data is defined and user_data is not null %}
+        {{ user_data.username ?? '' }}
+
+        {% if user_data.role is defined and user_data is not null %}
+            {% if user_data.role == 'admin' %}
+                Administrator Tito
+            {% endif %}
+
+            {% if user_data.role == 'editor' %}
+                Editor Tito
+            {% endif %}
+        {% else %}
+            User Tito
+        {% endif %}
+
+        <a href="/logout">Logout</a>
+    {% else %}
+        <nav>
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+        </nav>
+    {% endif %}

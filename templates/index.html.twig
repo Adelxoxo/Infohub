@@ -1,0 +1,22 @@
+<!-- templates/index.html.twig -->
+
+{% include 'header.html.twig' %}
+
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="2">No users have been found.</td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% include 'footer.html.twig' %}
