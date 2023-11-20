@@ -1,15 +1,26 @@
-<!-- templates/header.html.twig -->
-
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Adel</title>
-    <link href="style.css" rel="stylesheet">
-</head>
-<body>
-    <h1>Our users</h1>
+<html lang="en">
 
-    {% if user_data is defined and user_data is not null %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoHUB Home</title>
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+</head>
+
+<body>
+    <nav>
+        <a href="/" class="InfoHUB">info<span class="hub">HUB</span></a>
+        {# <a href="category.html">Learn</a>
+        <a href="category.html">Music</a>
+        <a href="category.html">Gaming</a>
+        <a href="category.html">Blog</a> #}
+
+        {% for category in categories %}
+            <a href="{{ path('category', {'id': category.id}) }}">{{ category.name }}</a>
+        {% endfor %}
+
+            {% if user_data is defined and user_data is not null %}
         {{ user_data.username ?? '' }}
 
         {% if user_data.role is defined and user_data is not null %}
@@ -26,8 +37,11 @@
 
         <a href="/logout">Logout</a>
     {% else %}
-        <nav>
             <a href="/register">Register</a>
             <a href="/login">Login</a>
-        </nav>
     {% endif %}
+    </nav>
+
+
+
+    <div id="wrapper">

@@ -1,0 +1,32 @@
+
+    <!-- templates/header.html.twig -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adel</title>
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+</head>
+<body>
+
+{% include 'header.html.twig' %}
+
+<table>
+    <tr class="bg-pink-400">
+        <th class="text-red-500">Username</th>
+        <th>Email</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="2">No users have been found.</td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% include 'footer.html.twig' %}
+</body>

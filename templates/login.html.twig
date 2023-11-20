@@ -1,7 +1,17 @@
 {# templates/login.html.twig #}
+{% include 'header.html.twig' %}
+
+<div class="breadcrumbs">
+    <a href="/">Home</a> &nbsp;&#47;&nbsp; 
+    <a href="/login">Register</a>
+</div>
+
+
 <form action="/login" method="POST">
     <input type="email" name="email">
     <input type="password" name="password">
     <input type="submit">
 </form>
 {{ test }}
+
+{% include 'footer.html.twig' %}
