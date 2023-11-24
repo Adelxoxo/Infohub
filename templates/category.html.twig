@@ -6,11 +6,32 @@
     <a href="{{ path('category', {'id': category.id}) }}">{{ category.name }}</a>
 </div>
 
-{% for post in posts %}
-    <div>
-    {{ post.name }}
-    {{ post.longText }}
+<div class="container">
+    <div class="main">
+        <h1>{{ category.name }}</h1>
+        {% if posts|length > 0 %}
+            <div class="articles">
+                {% for post in posts %}
+                    <div class="article-container">
+                        <a class="article" href="{{ path('category', {'id': post.id}) }}">
+                            <img src="{{ asset(post.banner) }}" alt="{{ post.name }} Thumbnail">
+                            <div class="article-info">
+                                <h2 class="article-title two-line">{{ post.name }}</h2>
+                                <p class="article-category">{{ post.category.name }}</p>
+                                <p class="article-date">{{ post.crdate|date('F j, Y') }}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No posts available in this category.</p>
+        {% endif %}
     </div>
-{% endfor %}
+</div>
+
+
+
+
 
 {% include 'footer.html.twig' %}

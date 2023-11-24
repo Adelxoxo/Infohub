@@ -1,8 +1,8 @@
-
 {% include 'header.html.twig' %}
 
 <div class="breadcrumbs">
     <a href="/">Home</a> &nbsp;&#47;&nbsp; 
+        <a href="{{ path('category', {'id': category.id}) }}">{{ category.name }}</a>
 </div>
 
 <div class="container">
