@@ -19,8 +19,10 @@ class PostService {
         $this->repository = $this->managerRegistry->getRepository(Post::class);
     }
 
+    
+
     public function getAll() {
-        return $this->repository->findAll()->sortBy();
+        return $this->repository->findBy([], ["crdate" => 'DESC']); // Sorting posts by creation date, descending order - i.e. newest
     }
 
     public function findById($id) {

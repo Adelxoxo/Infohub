@@ -3,20 +3,25 @@
 <div class="breadcrumbs">
     <a href="/">Home</a> &nbsp;&#47;&nbsp; 
     <a href="{{ path('category', {'id': category.id}) }}">{{ category.name }}</a>
-    <span>{{ post.name }}</span>
+    <a href= {{ path('post', {'id': post.id}) }}> &nbsp;&#47;&nbsp;{{ post.name }}</a>
+
 </div>
 
 <div class="container">
-        <div class="main">
+        <div class="article">
             <div class="article-header">
                 <div>{{ post.name }}</div>
                 <div class="article-date">{{ post.crdate | date("d/m/Y h:i") }} </div> 
             </div>
-            <img src="{{ post.banner }}" alt="{{ post.name }}">
-            <p>
-                {{ post.longText | raw }}
-            </p>
-        </div>
+                    <div class="banner">
+                        <img src="{{ post.banner }}" alt="{{ post.name }}">
+                    </div>
+                         <div class="article-content"> 
+                            <p>
+                                {{ post.longText | raw }}
+                            </p>
+                    </div>
+                </div>
 </div>
 
 {% include 'footer.html.twig' %}

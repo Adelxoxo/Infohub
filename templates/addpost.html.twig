@@ -1,18 +1,23 @@
 {% include 'header.html.twig' %}
-<h3>Category</h3>
-<select id="category-options">
+<link rel="stylesheet" href="{{ asset('addpost.css') }}">
+
+<div class="post-input">
+<span> Category: </span>
+<select id="category-options"> 
     {% for category in categories %}
         <option value="{{ category.id }}"> {{ category.name }} </option>
     {% endfor %}
 </select>
-<input type="text" id="post-name" placeholder="name" />
-<input type="text" id="post-bannner" placeholder="banner" />
+<span> Title: </span>
+<input type="text" id="post-name" placeholder="Article title" />
+<span> Thumbnail: </span>
+<input type="text" id="post-banner" placeholder="Article banner" />
 <div class="bg-white">
     <div id="editor-container">
-    <!-- Quill will be initialized here -->
+        <!-- Quill will be initialized here -->
     </div>
 </div>
-<button id="save-post">Save</button>
+<button id="save-post">PUBLISH</button>
 <script>
     // Get the container where you want to initialize Quill
     var editorContainer = document.getElementById('editor-container');
@@ -35,7 +40,7 @@
 
         var postName = document.getElementById('post-name').value;
         
-        var postBanner = document.getElementById('post-bannner').value;
+        var postBanner = document.getElementById('post-banner').value;
 
         // Make a POST request to your Symfony backend route
         fetch('/api/posts', {
