@@ -1,0 +1,64 @@
+{% include 'header.html.twig' %}
+<h3>Category</h3>
+<select id="category-options">
+    {% for category in categories %}
+        <option value="{{ category.id }}"> {{ category.name }} </option>
+    {% endfor %}
+</select>
+<input type="text" id="post-name" placeholder="name" />
+<input type="text" id="post-bannner" placeholder="banner" />
+<div class="bg-white">
+    <div id="editor-container">
+    <!-- Quill will be initialized here -->
+    </div>
+</div>
+<button id="save-post">Save</button>
+<script>
+    // Get the container where you want to initialize Quill
+    var editorContainer = document.getElementById('editor-container');
+
+    // Initialize Quill
+    var quill = new Quill(editorContainer, {
+        theme: 'snow' // 'snow' is a standard theme, other options are available
+    });
+
+    // Get the button element
+    var saveButton = document.getElementById('save-post');
+
+    // Add a click event listener to the button
+    saveButton.addEventListener('click', function () {
+        // Get the HTML content of the Quill editor
+        var content = quill.root.innerHTML;
+
+        // Get the selected category ID
+        var selectedCategoryId = document.getElementById('category-options').value;
+
+        var postName = document.getElementById('post-name').value;
+        
+        var postBanner = document.getElementById('post-bannner').value;
+
+        // Make a POST request to your Symfony backend route
+        fetch('/api/posts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: content,
+                categoryId: selectedCategoryId,
+                postName: postName,
+                postBanner: postBanner
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Handle success response from the server
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error
+        });
+    });
+</script>
+{% include 'footer.html.twig' %}

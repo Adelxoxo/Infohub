@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Services\CategoryService;
 use App\Services\PostService;
+use DateTime;
 
 class IndexController extends AbstractController
 {
@@ -126,9 +127,10 @@ class IndexController extends AbstractController
             ];
         }, $users);
 
-        return $this->render('index.html.twig', [
+        return $this->render('admin.html.twig', [
             'users' => $formattedUsers,
-            'user_data' => $userData
+            'user_data' => $userData,
+            'categories' => $this->categoryService->categories,
         ]);
     }
 
@@ -146,4 +148,39 @@ class IndexController extends AbstractController
         ]);
     }
 
+    #[Route('/post/add', name: 'post-add')]
+    public function addPost(Request $request): Response
+    {
+        $userData = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : null;
+    
+        // Get the post date and format it
+        return $this->render('addpost.html.twig', [
+            'user_data' => $userData,
+            'categories' => $this->categoryService->categories,
+        ]);
+    }
+
+    #[Route('/post/{id}', name: 'post')]
+    public function post($id): Response
+    {
+        $userData = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : null;
+        $post = $this->postService->findById($id);
+    
+        // Get the post date and format it
+        $postDate = $post->getCrdate(); // Assuming 'createdAt' is the property for the article date
+        $postDate = isset($postDate) ? $postDate : new DateTime();
+        $formattedPostDate = $postDate->format('F j, Y H:i:s');
+
+    
+        // Create a DateTime object representing the formatted date
+        $dateTimeObject = new DateTime($formattedPostDate);
+    
+        return $this->render('post.html.twig', [
+            'user_data' => $userData,
+            'post' => $post,
+            'formatted_date' => $dateTimeObject, // Pass the DateTime object to the Twig template
+            'categories' => $this->categoryService->categories,
+            'category' => $this->categoryService->findById($post->getCategory()->getId())
+        ]);
+    }
 }

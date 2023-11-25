@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="{{ asset('category.css') }}">
 {% include 'header.html.twig' %}
 
 <div class="breadcrumbs">
@@ -10,10 +10,11 @@
     <div class="main">
         <h1>{{ category.name }}</h1>
         {% if posts|length > 0 %}
+            
             <div class="articles">
                 {% for post in posts %}
                     <div class="article-container">
-                        <a class="article" href="{{ path('category', {'id': post.id}) }}">
+                        <a class="article" href="{{ path('post', {'id': post.id }) }}">
                             <img src="{{ asset(post.banner) }}" alt="{{ post.name }} Thumbnail">
                             <div class="article-info">
                                 <h2 class="article-title two-line">{{ post.name }}</h2>
@@ -24,6 +25,7 @@
                     </div>
                 {% endfor %}
             </div>
+
         {% else %}
             <p>No posts available in this category.</p>
         {% endif %}

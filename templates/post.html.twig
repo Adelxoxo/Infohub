@@ -1,0 +1,22 @@
+{% include 'header.html.twig' %}
+
+<div class="breadcrumbs">
+    <a href="/">Home</a> &nbsp;&#47;&nbsp; 
+    <a href="{{ path('category', {'id': category.id}) }}">{{ category.name }}</a>
+    <span>{{ post.name }}</span>
+</div>
+
+<div class="container">
+        <div class="main">
+            <div class="article-header">
+                <div>{{ post.name }}</div>
+                <div class="article-date">{{ post.crdate | date("d/m/Y h:i") }} </div> 
+            </div>
+            <img src="{{ post.banner }}" alt="{{ post.name }}">
+            <p>
+                {{ post.longText | raw }}
+            </p>
+        </div>
+</div>
+
+{% include 'footer.html.twig' %}

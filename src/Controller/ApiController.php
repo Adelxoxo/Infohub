@@ -2,6 +2,7 @@
 // src/Controller/ApiController.php
 namespace App\Controller;
 
+use App\Entity\Post;
 use App\Services\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,16 +11,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use App\Entity\User;
+use App\Services\PostService;
+use DateTime;
 
 #[Route('/api')]
 class ApiController extends AbstractController
 {
     private UserService $userService;
+    private PostService $postService;
     private SerializerInterface $serializer;
 
-    public function __construct(UserService $userService, SerializerInterface $serializer)
+    public function __construct(UserService $userService, PostService $postService, SerializerInterface $serializer)
     {
         $this->userService = $userService;
+        $this->postService = $postService;
         $this->serializer = $serializer;
     }
 
@@ -60,6 +65,19 @@ class ApiController extends AbstractController
 
         try {
             return new JsonResponse($this->userService->storeUser($serializer->deserialize($userData, User::class, 'json')));
+        } catch(\Exception $e) {
+            return new JsonResponse([
+                "code" => $e->getCode(),
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+    #[Route('/posts', methods: ['POST'])]
+    public function storePost(Request $request): JsonResponse
+    {
+        try {
+            return new JsonResponse($this->postService->store($request));
         } catch(\Exception $e) {
             return new JsonResponse([
                 "code" => $e->getCode(),

@@ -24,7 +24,7 @@ class Post
     private ?string $banner = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $crdate = null;
+    public ?\DateTimeInterface $crdate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastModified = null;
