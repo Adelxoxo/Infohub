@@ -1,10 +1,15 @@
+/* Common styles for all screen sizes */
 .article {
+    
+    display: flex;
+    flex-direction: column;
     flex-grow: 1; 
     background-color: #fff;
     border-radius: 15px;
     padding: 20px; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     max-width: 100%;
+
 }
 
 .article-content {
@@ -13,7 +18,19 @@
     line-height: 2.5rem;
     margin-left: auto;
     margin-right: auto;
-    width: 80%
+    width: 80%;
+}
+
+.article-header {
+    font-size: 32px;
+    font-weight: bold;
+    padding-top: 6px;
+    text-align: center;
+}
+
+.article-date {
+    color: rgba(0, 0, 0, 0.4) !important;
+    font-size: 18px;
 }
 
 .banner {
@@ -25,12 +42,12 @@
     margin-bottom: 20px; /* Add some space between the banner and content */
 }
 
+
 .banner img {
     width: 100%;
-    height: 100%;
+    height: 40vh;
     object-fit: cover; /* Fill the entire container while maintaining aspect ratio */
 }
-
 
 .thumbnail {
     flex-grow: 1; 
@@ -40,29 +57,48 @@
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 10px;
-    transition: filter 0.5s; /* Smooth transition for hover effect */
-    filter:saturate(60%) /* Adjust brightness on hover */
-}
-
-.thumbnail:hover {
-    background-image: linear-gradient(to right, transparent, #c15b87 25%);
-    filter: saturate(100%);
-    box-shadow: #c15b87;
-}
-
-
-
-.article-header {
-    font-size: 32px;
-    font-weight: bold;
-    padding-top: 6px;
-    text-align: center;
 
 }
 
-
-.article-date {
-    color: rgba(0, 0, 0, 0.4) !important;
-    font-size: 18px;
+.responsive-img {
+    max-width: 100%;
+    height: auto;
 }
 
+
+/* Media query for smaller screens */
+@media (max-width: 768px) { 
+
+.article {
+    visibility: visible;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    flex-grow: 1; 
+    background-color: #fff;
+    border-radius: 15px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    max-width: 100%;
+
+}
+.article-content {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin-inline: 0px;
+    width: 100%;
+}
+/* Add this CSS code to make images responsive */
+.responsive-img {
+    max-width: 100%; /* Ensure images do not exceed their container's width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+    .banner {
+        height: 30vh; /* Adjust banner height for smaller screens */
+    }
+
+    .thumbnail {
+        max-height: 7vh; /* Adjust thumbnail height for smaller screens */
+    }
+}

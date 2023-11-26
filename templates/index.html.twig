@@ -16,15 +16,15 @@
                 <div class="two-line">
                     {{ post.name }}
                 </div>
-                    <div class="banner thumbnail" style="background-image: url('{{ post.banner }}')"></div>
+                <div class="banner thumbnail" style="background-image: url('{{ post.banner }}')"></div>
 
-                    <div class="one-line">
-                    {% set parts = post.longText|split('&nbsp;') %} <!-- creates the firstPart variable -->
-                    {% set firstPart = parts[0]|striptags|raw %}    <!-- which it fills up with post longText data before a nbsp -->
-                    {{ firstPart }} <!-- displays that data -->
-                </div>
-
+                <div class="one-line">
+                {% set parts = post.longText|split('&nbsp;') %} <!-- creates the firstPart variable -->
+                {% set firstPart = parts[0]|striptags|raw %}    <!-- which it fills up with post longText data before a nbsp -->
+                {{ firstPart }} <!-- displays that data -->
             </div>
+
+        </div>
         {% endfor %}
     </div>
 </div>

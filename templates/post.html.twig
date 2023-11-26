@@ -7,21 +7,32 @@
 
 </div>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Add a class to images within post.longText
+        $('.article-content img').addClass('responsive-img');
+    });
+</script>
+
 <div class="container">
-        <div class="article">
-            <div class="article-header">
-                <div>{{ post.name }}</div>
-                <div class="article-date">{{ post.crdate | date("d/m/Y h:i") }} </div> 
-            </div>
-                    <div class="banner">
-                        <img src="{{ post.banner }}" alt="{{ post.name }}">
-                    </div>
-                         <div class="article-content"> 
-                            <p>
-                                {{ post.longText | raw }}
-                            </p>
-                    </div>
-                </div>
+    <div class="article">
+        <div class="article-header">
+            <div>{{ post.name }}</div>
+            <div class="article-date">{{ post.crdate | date("d/m/Y h:i") }}</div>
+        </div>
+        <div class="banner">
+            <img src="{{ post.banner }}" alt="{{ post.name }}">
+        </div>
+        <div class="article-content">
+            <p>
+                {{ post.longText | raw }}
+            </p>
+        </div>
+    </div>
 </div>
+
 
 {% include 'footer.html.twig' %}

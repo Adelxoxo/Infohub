@@ -11,15 +11,15 @@
         <h1>{{ category.name }}</h1>
         {% if posts|length > 0 %}
             
-            <div class="articles">
+            <div class="articles-preview">
                 {% for post in posts %}
-                    <div class="article-container">
-                        <a class="article" href="{{ path('post', {'id': post.id }) }}">
+                    <div class="article-preview-container">
+                        <a class="article-preview" href="{{ path('post', {'id': post.id }) }}">
                             <img src="{{ asset(post.banner) }}" alt="{{ post.name }} Thumbnail">
-                            <div class="article-info">
-                                <h2 class="article-title two-line">{{ post.name }}</h2>
-                                <p class="article-category">{{ post.category.name }}</p>
-                                <p class="article-date">{{ post.crdate|date('F j, Y') }}</p>
+                            <div class="article-preview-info">
+                                <h2 class="article-preview-title two-line">{{ post.name }}</h2>
+                                <p class="article-preview-category">{{ post.category.name }}</p>
+                                <p class="article-preview-date">{{ post.crdate|date('F j, Y') }}</p>
                             </div>
                         </a>
                     </div>
