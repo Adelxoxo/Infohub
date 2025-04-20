@@ -73,16 +73,21 @@ class ApiController extends AbstractController
         }
     }
 
-    #[Route('/posts', methods: ['POST'])]
-    public function storePost(Request $request): JsonResponse
+    #[Route('/api/posts/{id}', methods: ['PUT'])]
+    public function updatePost(Request $request, int $id): JsonResponse
     {
         try {
-            return new JsonResponse($this->postService->store($request));
+            $postId = $this->postService->update($request, $id);
+            
+            if ($postId) {
+                return new JsonResponse(['id' => $postId], JsonResponse::HTTP_OK);
+            } else {
+                return new JsonResponse(['error' => 'Failed to update post'], JsonResponse::HTTP_BAD_REQUEST);
+            }
         } catch(\Exception $e) {
             return new JsonResponse([
-                "code" => $e->getCode(),
-                "message" => $e->getMessage()
-            ]);
+                'error' => $e->getMessage()
+            ], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 }

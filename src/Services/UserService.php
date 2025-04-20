@@ -3,6 +3,7 @@ namespace App\Services;
 
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\User;
+use App\Entity\Role;
 use Exception;
 Use Symfony\Component\HttpFoundation\Request;
 
@@ -39,31 +40,34 @@ class UserService {
      * @param $email
      * @param $password
      */
-    public function storeUser(User $user) {
-        $userRepository = $this->managerRegistry->getRepository(User::class);
-
-        // Check if user already exists in DB
-        $existingUser = $userRepository->findOneBy([
-            "email" => $user->getemail()
-        ]);
-
-        if(!isset($existingUser)) {
-            $manager = $this->managerRegistry->getManager();
-            // Store user to db
-            $manager->persist($user);
-            $manager->flush();
-        } else {
-            // Throw exception
-            throw new Exception("User already exists.", 400);
+    public function storeUser(User $user): array
+    {
+        // Check if user already exists with this email
+        $existingUser = $this->managerRegistry->getRepository(User::class)
+            ->findOneBy(['email' => $user->getEmail()]);
+        if ($existingUser) {
+            throw new \Exception("User with this email already exists");
         }
 
+        // Hash the password before storing
+        $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
+
+        // Set a default role (assuming role ID 2 is "user")
+        $role = $this->managerRegistry->getRepository(Role::class)->find(2);
+        $user->setRole($role);
+
+        // Save the user
+        $manager = $this->managerRegistry->getManager();
+        $manager->persist($user);
+        $manager->flush();
+
         return [
-            "message" => "User created successfully.",
             "data" => [
-                "id" => $user->getId(),
-                "username" => $user->getUsername(),
-                "email" => $user->getEmail()
-            ]
+                'id' => $user->getId(),
+                'username' => $user->getUsername(),
+                'role' => $user->getRole()->getName(),
+            ],
+            "message" => "User registered successfully"
         ];
     }
 
@@ -71,16 +75,20 @@ class UserService {
      * @param $email
      * @param $password
      */
-    public function findUserByEmailAndPassword($email, $password) {
-        // ToDo if encription is used for stoing passeords ...
-        // $password = md5($password) // just example ...
+    public function findUserByEmailAndPassword(string $email, string $password): ?User
+    {
+        $user = $this->managerRegistry->getRepository(User::class)
+            ->findOneBy(['email' => $email]);
 
-        $userRepository = $this->managerRegistry->getRepository(User::class);
-        $user = $userRepository->findOneBy([
-            "email" => $email,
-            "password" => $password
-        ]);
-        
-        return $user;
+        if (!$user) {
+            return null;
+        }
+
+        // Use password_verify for checking hashed passwords
+        if (password_verify($password, $user->getPassword())) {
+            return $user;
+        }
+
+        return null;
     }
 }

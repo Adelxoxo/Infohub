@@ -31,6 +31,9 @@
                 {{ post.longText | raw }}
             </p>
         </div>
+        {% if user_data.role is defined and user_data.role in ['admin', 'editor'] %}
+            <a href="{{ path('editpost', {'id': post.id}) }}">Edit Post</a>
+        {% endif %}
     </div>
 </div>
 

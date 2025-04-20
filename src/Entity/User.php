@@ -28,7 +28,7 @@ class User
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Role::class)]
     #[Groups(['publicUsersApi', 'privateUsersApi'])]
     private ?Role $role = null;
 

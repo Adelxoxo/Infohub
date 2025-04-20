@@ -20,6 +20,27 @@
                                 <h2 class="article-preview-title two-line">{{ post.name }}</h2>
                                 <p class="article-preview-category">{{ post.category.name }}</p>
                                 <p class="article-preview-date">{{ post.crdate|date('F j, Y') }}</p>
+                                {% if user_data.role is defined and user_data is not null %}
+                                 {% if user_data.role == 'admin' or 'editor' %}
+                                    {# Admin/Writer Controls #}
+                                    <div class="admin-controls">
+                                        {# Edit Post Button - Links to the edit post page for each post #}
+                                        <a href="{{ path('editpost', {'id': post.id}) }}">Edit Post</a>
+   
+                                        {# Feature Post Button - Allows admin/writer to feature the post #}
+                                        {#{% if not post.featured %}
+                                            <form action="{{ path('feature_post', {'id': post.id}) }}" method="post">
+                                                <input type="submit" value="Feature Post">
+                                            </form>
+                                            #}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                {% if user_data.role is defined and user_data.role == 'admin' %}
+                                    <form action="{{ path('feature_post', {'id': post.id}) }}" method="post" style="display:inline;">
+                                        <button type="submit">Feature Post</button>
+                                    </form>
+                                {% endif %}
                             </div>
                         </a>
                     </div>
@@ -31,9 +52,5 @@
         {% endif %}
     </div>
 </div>
-
-
-
-
 
 {% include 'footer.html.twig' %}

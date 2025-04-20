@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\User;
 use App\Services\CategoryService;
 use App\Services\PostService;
@@ -30,23 +31,17 @@ class IndexController extends AbstractController
         $this->postService = $postService;
     }
 
-    #[Route('/' ,name: 'home')]
+    #[Route('/', name: 'home')]
     public function home(): Response
     {
-        $userData = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : null;
-        $users = $this->userService->getAllUsers();
-        $formattedUsers = array_map(function ($user) {
-            return [
-                'username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-            ];
-        }, $users);
+        $categories = $this->categoryService->categories; // Fetch categories
+        $featuredPost = $this->postService->findById(7); // Fetch post with ID 7
+        $latestPosts = $this->postService->getLatestPosts(5); // Fetch the latest 5 posts
 
         return $this->render('index.html.twig', [
-            'users' => $formattedUsers,
-            'user_data' => $userData,
-            'categories' => $this->categoryService->categories,
-            'posts' => $this->postService->getAll(),
+            'categories' => $categories,
+            'featuredPost' => $featuredPost,
+            'latestPosts' => $latestPosts,
         ]);
     }
 
@@ -61,19 +56,21 @@ class IndexController extends AbstractController
 
     #[Route('/login', methods: ['POST'])]
     public function loginUser(Request $request): Response
-    {   
+    {
         $email = $request->get('email');
         $password = $request->get('password');
 
         $loggedInUser = $this->userService->findUserByEmailAndPassword($email, $password);
-        $role = $loggedInUser->getRole();
 
-        $_SESSION['user_data'] = isset($loggedInUser) ? [
-            "id" => $loggedInUser->getId(),
-            "username" => $loggedInUser->getUsername(),
-            "email" => $loggedInUser->getEmail(),
-            "role" => isset($role) ? $role->getName() : null,
-            ] : null;
+        if (!$loggedInUser) {
+            return new Response('Invalid credentials', Response::HTTP_UNAUTHORIZED);
+        }
+
+        $_SESSION['user_data'] = [
+            'id' => $loggedInUser->getId(),
+            'username' => $loggedInUser->getUsername(),
+            'role' => $loggedInUser->getRole()->getName(),
+        ];
 
         return $this->redirectToRoute('home');
     }
@@ -160,21 +157,28 @@ class IndexController extends AbstractController
         ]);
     }
 
+
     #[Route('/post/{id}', name: 'post')]
     public function post($id): Response
     {
         $userData = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : null;
         $post = $this->postService->findById($id);
+        
+        if (!$post) {
+            // Handle the case where the post with the given ID is not found
+            // For instance, you can display an error message or redirect to another page
+            return $this->redirectToRoute('home');
+        }
     
         // Get the post date and format it
         $postDate = $post->getCrdate(); // Assuming 'createdAt' is the property for the article date
         $postDate = isset($postDate) ? $postDate : new DateTime();
         $formattedPostDate = $postDate->format('F j, Y H:i:s');
-
     
         // Create a DateTime object representing the formatted date
         $dateTimeObject = new DateTime($formattedPostDate);
     
+        // Render the post view instead of redirecting immediately
         return $this->render('post.html.twig', [
             'user_data' => $userData,
             'post' => $post,
@@ -182,5 +186,58 @@ class IndexController extends AbstractController
             'categories' => $this->categoryService->categories,
             'category' => $this->categoryService->findById($post->getCategory()->getId())
         ]);
+    }
+
+    #[Route('/editpost/{id}', name: 'editpost', methods: ['GET', 'POST'])]
+    public function editPost(Request $request, int $id): Response
+    {
+        $userData = $_SESSION['user_data'] ?? null;
+
+        // Ensure only admins or editors can edit posts
+        if (!$userData || !in_array($userData['role'], ['admin', 'editor'])) {
+            return $this->redirectToRoute('home');
+        }
+
+        $post = $this->postService->findById($id);
+        if (!$post) {
+            return new Response('Post not found', Response::HTTP_NOT_FOUND);
+        }
+
+        if ($request->isMethod('POST')) {
+            $postName = $request->get('postName');
+            $postBanner = $request->get('postBanner');
+            $postContent = $request->get('content');
+            $categoryId = $request->get('categoryId');
+
+            $this->postService->updatePost($id, $postName, $postBanner, $postContent, $categoryId);
+
+            return $this->redirectToRoute('post', ['id' => $id]);
+        }
+
+        return $this->render('editpost.html.twig', [
+            'post' => $post,
+            'categories' => $this->categoryService->categories,
+        ]);
+    }
+
+    #[Route('/post/feature/{id}', name: 'feature_post', methods: ['POST'])]
+    public function featurePost(int $id): Response
+    {
+        $userData = $_SESSION['user_data'] ?? null;
+
+        // Ensure only admins can feature posts
+        if (!$userData || ($userData['role'] ?? '') !== 'admin') {
+            return $this->redirectToRoute('home');
+        }
+
+        $post = $this->postService->findById($id);
+        if (!$post) {
+            return new Response('Post not found', Response::HTTP_NOT_FOUND);
+        }
+
+        $post->setFeatured(true);
+        $this->postService->save($post);
+
+        return $this->redirectToRoute('home');
     }
 }

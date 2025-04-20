@@ -32,6 +32,9 @@ class Post
     #[ORM\ManyToOne(inversedBy: 'posts')]
     private ?Category $category = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $featured = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +109,17 @@ class Post
     {
         $this->category = $category;
 
+        return $this;
+    }
+
+    public function isFeatured(): bool
+    {
+        return $this->featured;
+    }
+
+    public function setFeatured(bool $featured): static
+    {
+        $this->featured = $featured;
         return $this;
     }
 }

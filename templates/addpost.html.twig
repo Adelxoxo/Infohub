@@ -42,28 +42,33 @@
         
         var postBanner = document.getElementById('post-banner').value;
 
-        // Make a POST request to your Symfony backend route
-        fetch('/api/posts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                content: content,
-                categoryId: selectedCategoryId,
-                postName: postName,
-                postBanner: postBanner
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            // Handle success response from the server
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Handle error
-        });
+// Make a POST request to your Symfony backend route
+fetch('/api/posts', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        content: content,
+        categoryId: CategoryId,
+        postName: postName,
+        postBanner: postBanner
+    }),
+})
+.then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        if (data && data.id) {
+            window.location.href = '/post/' + data.id; // Redirect to the new post's URL
+        } else {
+            console.error('Invalid post data:', data);
+            // Handle error or display a message to the user
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Handle error
     });
+});
 </script>
 {% include 'footer.html.twig' %}

@@ -31,14 +31,14 @@
 
         {% if user_data.role is defined and user_data is not null %}
             {% if user_data.role == 'admin' %}
-                Administrator Tito
+                Administrator
             {% endif %}
 
             {% if user_data.role == 'editor' %}
-                Editor Tito
+                Editor
             {% endif %}
         {% else %}
-            User Tito
+            User
         {% endif %}
 
         <a href="/post/add">Add Post</a>

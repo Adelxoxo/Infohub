@@ -5,3 +5,8 @@ controllers:
 kernel:
     resource: ../src/Kernel.php
     type: annotation
+
+editpost:
+    path: '/editpost/{id}'
+    controller: 'App\Controller\ApiController::updatePost'
+    methods: ['GET'] # Adjust the HTTP method as per your requirements

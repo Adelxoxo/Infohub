@@ -1,0 +1,27 @@
+{% include 'header.html.twig' %}
+<link rel="stylesheet" href="{{ asset('addpost.css') }}">
+
+<div class="post-input">
+    <form action="{{ path('editpost', {'id': post.id}) }}" method="POST">
+        <span>Category:</span>
+        <select name="categoryId" id="category-options">
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == post.category.id %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <span>Title:</span>
+        <input type="text" name="postName" id="post-name" value="{{ post.name }}" placeholder="Article title" />
+        <span>Thumbnail:</span>
+        <input type="text" name="postBanner" id="post-banner" value="{{ post.banner }}" placeholder="Article banner" />
+        <div class="bg-white">
+            <div id="editor-container">
+                <textarea name="content" id="content" rows="10">{{ post.longText }}</textarea>
+            </div>
+        </div>
+        <button type="submit" id="save-post">Save Changes</button>
+    </form>
+</div>
+
+{% include 'footer.html.twig' %}

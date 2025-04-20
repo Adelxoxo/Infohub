@@ -96,6 +96,7 @@ nav a:hover {
 
 .featured-content {
     margin-right: 20px;
+    max-width: 10%;
 }
 
 /*SIDEBAR PORTION */
@@ -110,6 +111,9 @@ nav a:hover {
 }
 
 .sidebar-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     position: relative;
     background-color: #fff;
     margin-bottom: 10px;
@@ -276,8 +280,16 @@ input[type="submit"]:hover {
         font-size: 0.9rem; /* Adjust font size for content on mobile */
     }
 
+        .sidebar {
+            padding: 15px; /* Adjust padding for smaller screens */
+        }
+    
+        .sidebar-item {
+            margin-bottom: 8px; /* Adjust margin for smaller screens */
+            padding: 8px; /* Adjust padding for sidebar items */
+        }
+    }
     /* Other adjustments for mobile layout... */
-}
 
     
 
