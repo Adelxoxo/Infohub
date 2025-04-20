@@ -114,9 +114,6 @@ Contributions are welcome! Please follow these steps:
 3. Commit your changes and push them to your fork.
 4. Submit a pull request.
 
-## License
-This project is licensed under the **MIT License**. See the `LICENSE` file for details.
-
 ## Acknowledgments
 * Built with **Symfony**
 * Frontend powered by **Tailwind CSS** and **Quill Editor**
