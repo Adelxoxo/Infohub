@@ -1,10 +1,6 @@
 # InfoHUB
 
 InfoHUB is a content management system (CMS) built with Symfony. It allows users to create, edit, and manage posts, categories, and user roles. The project includes features such as user authentication, role-based access control, and a responsive frontend.
-
-### Demo
-![Demo of InfoHUB](public/assets/infohub.jpg)
-
 ---
 
 ## Features
